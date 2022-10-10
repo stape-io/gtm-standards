@@ -81,33 +81,33 @@ function determinateIsLoggingEnabled() {
 
 ```json
 {
-    "displayName": "Logs Settings",
-    "name": "logsGroup",
-    "groupStyle": "ZIPPY_CLOSED",
-    "type": "GROUP",
-    "subParams": [
-      {
-        "type": "RADIO",
-        "name": "logType",
-        "radioItems": [
-          {
-            "value": "no",
-            "displayValue": "Do not log"
-          },
-          {
-            "value": "debug",
-            "displayValue": "Log to console during debug and preview"
-          },
-          {
-            "value": "always",
-            "displayValue": "Always log to console"
-          }
-        ],
-        "simpleValueType": true,
-        "defaultValue": "debug"
-      }
-    ]
-  }
+  "displayName": "Logs Settings",
+  "name": "logsGroup",
+  "groupStyle": "ZIPPY_CLOSED",
+  "type": "GROUP",
+  "subParams": [
+    {
+      "type": "RADIO",
+      "name": "logType",
+      "radioItems": [
+        {
+          "value": "no",
+          "displayValue": "Do not log"
+        },
+        {
+          "value": "debug",
+          "displayValue": "Log to console during debug and preview"
+        },
+        {
+          "value": "always",
+          "displayValue": "Always log to console"
+        }
+      ],
+      "simpleValueType": true,
+      "defaultValue": "debug"
+    }
+  ]
+}
 ```
 
 
