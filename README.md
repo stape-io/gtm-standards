@@ -14,6 +14,11 @@ We hope that the community will benefit from using our standards and help us imp
 - [GTMS-3](standards/GTMS-3.md) - Server Templates Logging
 - [GTMS-6](standards/GTMS-6.md) - Firebase Settings
 
+## Proposals
+
+- [GTMS-4](proposals/GTMS-4.md) - Template code formatting
+- [GTMS-5](proposals/GTMS-5.md) - Template repository file structure
+
 ## Open Source
 
 Maintained by [Stape Team](https://stape.io/) under the Apache 2.0 license.
