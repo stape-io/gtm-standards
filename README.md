@@ -12,12 +12,9 @@ We hope that the community will benefit from using our standards and help us imp
 ## Standards
 
 - [GTMS-3](standards/GTMS-3.md) - Server Templates Logging
+- [GTMS-4](standards/GTMS-4.md) - Template code formatting
+- [GTMS-5](standards/GTMS-5.md) - Template repository file structure
 - [GTMS-6](standards/GTMS-6.md) - Firebase Settings
-
-## Proposals
-
-- [GTMS-4](proposals/GTMS-4.md) - Template code formatting
-- [GTMS-5](proposals/GTMS-5.md) - Template repository file structure
 
 ## Open Source
 
