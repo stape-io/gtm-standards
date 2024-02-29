@@ -11,6 +11,7 @@ We hope that the community will benefit from using our standards and help us imp
 
 ## Standards
 
+- [GTMS-2](standards/GTMS-2.md) - Server Templates Consent Management
 - [GTMS-3](standards/GTMS-3.md) - Server Templates Logging
 - [GTMS-4](standards/GTMS-4.md) - Template code formatting
 - [GTMS-5](standards/GTMS-5.md) - Template repository file structure
