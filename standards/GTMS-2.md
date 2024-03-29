@@ -15,7 +15,7 @@ This standard provides a way to manage consent in the SGTM templates.
 - By default, `adStorageConsent` must be `optional`.
 - If `adStorageConsent` is `required`, the template must check if the consent is given and send data only if the consent is given.
 - If `adStorageConsent` is `optional`, the template must send data always.
-- The template must check if the consent is given by the `consent_state` parameter or `x-ga-gcs` header.
+- The template must check if the consent is given by the `consent_state` or `x-ga-gcs` property.
 
 ### Example Code
 
@@ -29,8 +29,8 @@ if (!isConsentGivenOrNotRequired()) {
 function isConsentGivenOrNotRequired() {
   if (data.adStorageConsent !== 'required') return true;
   if (eventData.consent_state) return !!eventData.consent_state.ad_storage;
-  const xGaGcs = getRequestHeader('x-ga-gcs') || ''; // x-ga-gcs is a string like "G110"
-  return xGaGcs[3] === '1';
+  const xGaGcs = eventData['x-ga-gcs'] || ''; // x-ga-gcs is a string like "G110"
+  return xGaGcs[2] === '1';
 }
 ```
 
