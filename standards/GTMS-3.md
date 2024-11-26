@@ -23,33 +23,34 @@ const isLoggingEnabled = determinateIsLoggingEnabled();
 const postUrl = 'https://example.com';
 const postBody = {'data': 'some data'};
 
-if (isLoggingEnabled) {
-    logToConsole(JSON.stringify({
-        'Name': 'Example',
-        'Type': 'Request',
-        'TraceId': traceId,
-        'EventName': 'purchase',
-        'RequestMethod': 'POST',
-        'RequestUrl': postUrl,
-        'RequestBody': postBody,
-    }));
-}
+log({
+  'Name': 'Example',
+  'Type': 'Request',
+  'TraceId': traceId,
+  'EventName': 'purchase',
+  'RequestMethod': 'POST',
+  'RequestUrl': postUrl,
+  'RequestBody': postBody,
+});
 
 sendHttpRequest(postUrl, (statusCode, headers, body) => {
-    if (isLoggingEnabled) {
-        logToConsole(JSON.stringify({
-            'Name': 'Example',
-            'Type': 'Response',
-            'TraceId': traceId,
-            'EventName': makeString(data.conversionActionId),
-            'ResponseStatusCode': statusCode,
-            'ResponseHeaders': headers,
-            'ResponseBody': body,
-        }));
-    }
+log({
+    'Name': 'Example',
+    'Type': 'Response',
+    'TraceId': traceId,
+    'EventName': makeString(data.conversionActionId),
+    'ResponseStatusCode': statusCode,
+    'ResponseHeaders': headers,
+    'ResponseBody': body,
+});
 }, {method: 'POST'}, JSON.stringify(postBody));
 
 
+function log(logObject) {
+  if (isLoggingEnabled) {
+    logToConsole(JSON.stringify(logObject));
+  }
+}
 
 function determinateIsLoggingEnabled() {
     const containerVersion = getContainerVersion();
