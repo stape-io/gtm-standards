@@ -77,16 +77,17 @@ Combine the fields from both `Request` and `Response` types when receiving the r
 
 ```js
 const BigQuery = require('BigQuery');
-const getContainerVersion = require('getContainerVersion');
 const getRequestHeader = require('getRequestHeader');
-const isLoggingEnabled = determinateIsLoggingEnabled();
+const getTimestampMillis = require('getTimestampMillis');
+const isLoggingEnabledForBigQuery = determinateIsLoggingEnabledForBigQuery();
 const traceId = isLoggingEnabled ? getRequestHeader('trace-id') : undefined;
 
 const postUrl = 'https://example.com';
 const postBody = { 'data': 'some data' };
 
+// 'Message'
 if (validateMissingRequiredFields()) {
-  log({
+  logToBigQuery({
     'tag_name': 'Example',
     'type': 'Message',
     'trace_id': traceId,
@@ -98,7 +99,8 @@ if (validateMissingRequiredFields()) {
   return data.gtmOnFailure();
 }
 
-log({
+// 'Request'
+logToBigQuery({
   'tag_name': 'Example',
   'type': 'Request',
   'trace_id': traceId,
@@ -109,8 +111,9 @@ log({
   'request_body': JSON.stringify(postBody)
 });
 
+// 'Response'
 sendHttpRequest(postUrl, (statusCode, headers, body) => {
-  log({
+  logToBigQuery({
     'tag_name': 'Example',
     'type': 'Response',
     'trace_id': traceId,
@@ -122,8 +125,9 @@ sendHttpRequest(postUrl, (statusCode, headers, body) => {
   });
 }, { method: 'POST' }, JSON.stringify(postBody));
 
+// 'Request-Response'
 sendHttpRequest(postUrl, (statusCode, headers, body) => {
-  log({
+  logToBigQuery({
     'tag_name': 'Example',
     'type': 'Request-Response',
     'trace_id': traceId,
@@ -138,42 +142,95 @@ sendHttpRequest(postUrl, (statusCode, headers, body) => {
   });
 }, { method: 'POST' }, JSON.stringify(postBody));
 
-function log(logObject) {
-  if (isLoggingEnabled) {
+function logToBigQuery(logObject) {
+  if (isLoggingEnabledForBigQuery) {
     const connectionInfo = {
-      projectId: '<GCP Project ID>',
-      datasetId: '<BigQuery Dataset ID>',
-      tableId: '<BigQuery Table ID>'
+      projectId: data.logBigQueryProjectId,
+      datasetId: data.logBigQueryDatasetId,
+      tableId: data.logBigQueryTabletId
     };
     BigQuery.insert(connectionInfo, [logObject], { ignoreUnknownValues: true });
   }
 }
 
-function determinateIsLoggingEnabled() {
-   const containerVersion = getContainerVersion();
-   const isDebug = !!(
-       containerVersion &&
-       (containerVersion.debugMode || containerVersion.previewMode)
-   );
-
-   if (!data.logType) {
-       return isDebug;
-   }
-
-   if (data.logType === 'no') {
-       return false;
-   }
-
-   if (data.logType === 'debug') {
-       return isDebug;
-   }
-
-   return data.logType === 'always';
+function determinateIsLoggingEnabledForBigQuery() {
+  if (data.bigQueryLogType === 'no') return false;
+  return data.bigQueryLogType === 'always';
 }
 ```
 
 ### Example UI
 
-![UI](/images/gtms-7-ui.png)
+![UI 1](/images/gtms-7-ui-1.png)
+![UI 2](/images/gtms-7-ui-2.png)
 
-TBD
+```json
+{
+  "displayName": "BigQuery Logs Settings",
+  "name": "bigQueryLogsGroup",
+  "groupStyle": "ZIPPY_CLOSED",
+  "type": "GROUP",
+  "subParams": [
+    {
+      "type": "RADIO",
+      "name": "bigQueryLogType",
+      "radioItems": [
+        {
+          "value": "no",
+          "displayValue": "Do not log to BigQuery"
+        },
+        {
+          "value": "always",
+          "displayValue": "Log to BigQuery"
+        }
+      ],
+      "simpleValueType": true,
+      "defaultValue": "no"
+    },
+    {
+      "type": "GROUP",
+      "name": "logsBiqQueryConfigGroup",
+      "displayName": "",
+      "groupStyle": "NO_ZIPPY",
+      "subParams": [
+        {
+          "type": "TEXT",
+          "name": "logBigQueryProjectId",
+          "displayName": "BigQuery Project ID",
+          "simpleValueType": true,
+          "help": "Optional.  <br><br>  If omitted, it will be retrieved from the environment variable <I>GOOGLE_CLOUD_PROJECT</i> where the server container is running. If the server container is running on Google Cloud, <I>GOOGLE_CLOUD_PROJECT</i> will already be set to the Google Cloud project's ID."
+        },
+        {
+          "type": "TEXT",
+          "name": "logBigQueryDatasetId",
+          "displayName": "BigQuery Dataset ID",
+          "simpleValueType": true,
+          "valueValidators": [
+            {
+              "type": "NON_EMPTY"
+            }
+          ]
+        },
+        {
+          "type": "TEXT",
+          "name": "logBigQueryTabletId",
+          "displayName": "BigQuery Table ID",
+          "simpleValueType": true,
+          "valueValidators": [
+            {
+              "type": "NON_EMPTY"
+            }
+          ]
+        }
+      ],
+      "enablingConditions": [
+        {
+          "paramName": "bigQueryLogType",
+          "paramValue": "always",
+          "type": "EQUALS"
+        }
+      ]
+    }
+  ]
+}
+```
