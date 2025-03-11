@@ -147,7 +147,7 @@ function logToBigQuery(logObject) {
     const connectionInfo = {
       projectId: data.logBigQueryProjectId,
       datasetId: data.logBigQueryDatasetId,
-      tableId: data.logBigQueryTabletId
+      tableId: data.logBigQueryTableId
     };
     BigQuery.insert(connectionInfo, [logObject], { ignoreUnknownValues: true });
   }
@@ -213,7 +213,7 @@ function determinateIsLoggingEnabledForBigQuery() {
         },
         {
           "type": "TEXT",
-          "name": "logBigQueryTabletId",
+          "name": "logBigQueryTableId",
           "displayName": "BigQuery Table ID",
           "simpleValueType": true,
           "valueValidators": [
