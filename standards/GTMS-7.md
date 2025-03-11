@@ -14,8 +14,8 @@ GTM Server-Side does not have a common format for writing logs to `BigQuery`. Th
 - Field `type` must contain one of these values `Request`, `Response`, `Request-Response`, `Message`. Which helps easily filter logs.
 - `trace_id` must contain a unique identifier of the current incoming request. This field is used for stitching all logs done by all tags/clients during one request. It's highly recommended using the `trace-id` header for this, as many clouds/platforms use it for tracing. 
 - Field `tag_name` must contain the tag name.
-- All fields must use snake case naming, e.g. `trace_id`, `response_code`etc. and not `TraceId`, `ResponseCode` etc.
-- `ignoreUnknownValues` must be set to `true` to handle schema changes gracefully. This allows new fields to be added without breaking existing logs.
+- All fields must use snake case naming, e.g. `trace_id`, `response_code`etc. and *not* `TraceId`, `ResponseCode` etc.
+- `ignoreUnknownValues` must be set to `true` in `BigQuery.insert(...)` to handle schema changes gracefully. This allows new fields to be added without breaking existing logs.
 
 
 #### Recommended additional fields
@@ -145,7 +145,7 @@ function log(logObject) {
       datasetId: '<BigQuery Dataset ID>',
       tableId: '<BigQuery Table ID>'
     };
-    BigQuery(connectionInfo, [logObject], { ignoreUnknownValues: true });
+    BigQuery.insert(connectionInfo, [logObject], { ignoreUnknownValues: true });
   }
 }
 
