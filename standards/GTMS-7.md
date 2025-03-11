@@ -7,7 +7,8 @@ GTM Server-Side does not have a common format for writing logs to `BigQuery`. Th
 
 ### Standard description
 
-- Each log line is a row in BigQuery. Each insertion to the BigQuery table must add only one row at a time.
+- Each log line is a row in BigQuery.
+- Each insertion to the BigQuery table must add only one row at a time.
 - Each log line must contain at least: `timestamp`, `type`, `tag_name` and `trace_id` fields.
 - Field `timestamp` must contain the Unix epoch timestamp in milliseconds.
 - Field `type` must contain one of these values `Request`, `Response`, `Request-Response`, `Message`. Which helps easily filter logs.
@@ -35,7 +36,8 @@ Based on the log type, the following additional fields are recommended:
 - `event_name`: Name of the event being tracked.
 
 ##### For type `Request-Response`
-Combine the fields from both `Request` and `Response` types.
+
+Combine the fields from both `Request` and `Response` types when receiving the response.
 
 ##### For type `Message`
 
@@ -90,8 +92,8 @@ if (validateMissingRequiredFields()) {
     'trace_id': traceId,
     'timestamp': getTimestampMillis(),
     'event_name': 'purchase',
-    'message': 'Request won't be sent.',
-    'reason': 'One or more fields are missing: Email, Phone Number or External ID.',
+    'message': 'Request won\'t be sent.',
+    'reason': 'One or more fields are missing: Email, Phone Number or External ID.'
   });
   return data.gtmOnFailure();
 }
@@ -104,7 +106,7 @@ log({
   'event_name': 'purchase',
   'request_method': 'POST',
   'request_url': postUrl,
-  'request_body': JSON.stringify(postBody),
+  'request_body': JSON.stringify(postBody)
 });
 
 sendHttpRequest(postUrl, (statusCode, headers, body) => {
@@ -115,15 +117,15 @@ sendHttpRequest(postUrl, (statusCode, headers, body) => {
     'timestamp': getTimestampMillis(),
     'event_name': 'purchase',
     'response_status_code': statusCode,
-    'response_headers': headers,
-    'response_body': body,
+    'response_headers': JSON.stringify(headers),
+    'response_body': body
   });
 }, { method: 'POST' }, JSON.stringify(postBody));
 
 sendHttpRequest(postUrl, (statusCode, headers, body) => {
   log({
     'tag_name': 'Example',
-    'type': 'Response', // ??????????
+    'type': 'Request-Response',
     'trace_id': traceId,
     'timestamp': getTimestampMillis(),
     'event_name': 'purchase',
@@ -131,8 +133,8 @@ sendHttpRequest(postUrl, (statusCode, headers, body) => {
     'request_url': postUrl,
     'request_body': JSON.stringify(postBody),
     'response_status_code': statusCode,
-    'response_headers': headers,
-    'response_body': body,
+    'response_headers': JSON.stringify(headers),
+    'response_body': body
   });
 }, { method: 'POST' }, JSON.stringify(postBody));
 
@@ -169,9 +171,6 @@ function determinateIsLoggingEnabled() {
    return data.logType === 'always';
 }
 ```
-
-TBD
-
 
 ### Example UI
 
