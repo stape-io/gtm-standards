@@ -189,7 +189,7 @@ function determinateIsLoggingEnabledForBigQuery() {
     },
     {
       "type": "GROUP",
-      "name": "logsBiqQueryConfigGroup",
+      "name": "logsBigQueryConfigGroup",
       "displayName": "",
       "groupStyle": "NO_ZIPPY",
       "subParams": [
