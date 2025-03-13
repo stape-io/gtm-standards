@@ -17,7 +17,6 @@ GTM Server-Side does not have a common format for writing logs to `BigQuery`. Th
 - All fields must use snake case naming, e.g. `trace_id`, `response_code`etc. and *not* `TraceId`, `ResponseCode` etc.
 - `ignoreUnknownValues` must be set to `true` in `BigQuery.insert(...)` to handle schema changes gracefully. This allows new fields to be added without breaking existing logs.
 
-
 #### Recommended additional fields
 Based on the log type, the following additional fields are recommended:
 
@@ -41,9 +40,11 @@ Based on the log type, the following additional fields are recommended:
 - `reason`: Explanation of why the message was logged.
 - `event_name`: Name of the event being tracked (if applicable).
 
+---
 
-### REQUIRED BigQuery Schema
+### BigQuery table
 
+#### Required table schema
 | Field Name       | Type     | Mode     | Description |
 |-----------------|-----------|----------|-------------|
 | `timestamp`     | TIMESTAMP    | REQUIRED | Unix epoch timestamp (milliseconds). |
@@ -51,8 +52,13 @@ Based on the log type, the following additional fields are recommended:
 | `trace_id`      | STRING   | REQUIRED | Unique identifier for the request (from the `trace-id` header). |
 | `tag_name`      | STRING   | REQUIRED | Name of the GTM tag generating the log. |
 
+```json
+[TO DO]
+Put table JSON schema here.
+...
+```
 
-### Expanded BigQuery Schema (suggestion)
+#### Expanded table schema (suggestion)
 
 | Field Name       | Type     | Mode     | Description |
 |-----------------|-----------|----------|-------------|
@@ -68,6 +74,22 @@ Based on the log type, the following additional fields are recommended:
 | `response_headers` | JSON   | NULLABLE |  JSON API response headers (if applicable). |
 | `message`       | STRING   | NULLABLE |  Additional log messages (for `Message` type). |
 | `reason`        | STRING   | NULLABLE |  Reason for failure (for `Message` type). |
+
+```json
+[TO DO]
+Put table JSON schema here.
+...
+```
+
+#### Table Creation on BigQuery
+
+[TO DO]
+
+- Example of manually creating the table
+
+- Example of creating the table via SQL
+
+---
 
 ### Example Code
 
