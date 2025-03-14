@@ -7,7 +7,7 @@ GTM Server-Side does not have a common format for writing logs to `BigQuery`. Th
 
 ### Standard description
 
-- Each log line is a row in BigQuery.
+- Each log line is a row in the BigQuery table.
 - Each insertion to the BigQuery table must add only one row at a time.
 - Each log line must contain at least: `timestamp`, `type`, `tag_name` and `trace_id` fields.
 - Field `timestamp` must contain the Unix epoch timestamp in milliseconds.
@@ -18,27 +18,27 @@ GTM Server-Side does not have a common format for writing logs to `BigQuery`. Th
 - `ignoreUnknownValues` must be set to `true` in `BigQuery.insert(...)` to handle schema changes gracefully. This allows new fields to be added without breaking existing logs.
 
 #### Recommended additional fields
-Based on the log type, the following additional fields are recommended:
+Based on the log `type`, the following additional fields are recommended:
 
 ##### For type `Request`
 
 - `request_method`: HTTP method (GET, POST, etc.).
 - `request_url`: Full URL of the request.
-- `request_body`: String representation of the request body.
+- `request_body`: JSON string representation of the request body.
 - `event_name`: Name of the event being tracked.
 
 ##### For type `Response`
 
 - `response_status_code`: HTTP status code.
-- `response_body`: String representation of the response body.
-- `response_headers`: String representation of response headers.
+- `response_body`: JSON string representation of the response body.
+- `response_headers`: JSON string representation of response headers.
 - `event_name`: Name of the event being tracked.
 
 ##### For type `Message`
 
 - `message`: Information or error message.
 - `reason`: Explanation of why the message was logged.
-- `event_name`: Name of the event being tracked (if applicable).
+- `event_name`: Name of the event being tracked.
 
 ---
 
@@ -47,47 +47,179 @@ Based on the log type, the following additional fields are recommended:
 #### Required table schema
 | Field Name       | Type     | Mode     | Description |
 |-----------------|-----------|----------|-------------|
-| `timestamp`     | TIMESTAMP    | REQUIRED | Unix epoch timestamp (milliseconds). |
+| `timestamp`     | INTEGER   | REQUIRED | Unix epoch timestamp (milliseconds). |
 | `type`          | STRING   | REQUIRED | Log type: `Request`, `Response` or `Message`. |
 | `trace_id`      | STRING   | REQUIRED | Unique identifier for the request (from the `trace-id` header). |
 | `tag_name`      | STRING   | REQUIRED | Name of the GTM tag generating the log. |
 
 ```json
-[TO DO]
-Put table JSON schema here.
-...
+[
+    {
+        "name": "timestamp",
+        "type": "INTEGER",
+        "mode": "REQUIRED",
+        "description": "Unix epoch timestamp (milliseconds)."
+    },
+    {
+        "name": "type",
+        "type": "STRING",
+        "mode": "REQUIRED",
+        "description": "Log type: `Request`, `Response` or `Message`."
+    },
+    {
+        "name": "trace_id",
+        "type": "STRING",
+        "mode": "REQUIRED",
+        "description": "Unique identifier for the request (from the `trace-id` header)."
+    },
+    {
+        "name": "tag_name",
+        "type": "STRING",
+        "mode": "REQUIRED",
+        "description": "Name of the GTM tag generating the log."
+    }
+]
 ```
 
 #### Expanded table schema (suggestion)
 
 | Field Name       | Type     | Mode     | Description |
 |-----------------|-----------|----------|-------------|
-| `timestamp`     | TIMESTAMP    | REQUIRED | Unix epoch timestamp (milliseconds). |
+| `timestamp`     | INTEGER    | REQUIRED | Unix epoch timestamp (milliseconds). |
 | `type`          | STRING   | REQUIRED | Log type: `Request`, `Response` or `Message`. |
 | `trace_id`      | STRING   | REQUIRED | Unique identifier for the request (from the `trace-id` header). |
 | `tag_name`      | STRING   | REQUIRED | Name of the GTM tag generating the log. |
 | `request_method`   | STRING   | NULLABLE | HTTP method (GET, POST, etc.) (if applicable). |
 | `request_url`   | STRING   | NULLABLE |  URL of the API request (if applicable). |
-| `request_body`  | JSON   | NULLABLE |  JSON request body (if applicable). |
+| `request_body`  | JSON   | NULLABLE |  JSON string representation of request body (if applicable). |
 | `response_status_code` | INTEGER    | NULLABLE |  HTTP status code from API response (if applicable). |
-| `response_body` | JSON   | NULLABLE |  JSON API response body (if applicable). |
-| `response_headers` | JSON   | NULLABLE |  JSON API response headers (if applicable). |
+| `response_body` | JSON   | NULLABLE |  JSON string representation of API response body (if applicable). |
+| `response_headers` | JSON   | NULLABLE |  JSON string representation of API response headers (if applicable). |
 | `message`       | STRING   | NULLABLE |  Additional log messages (for `Message` type). |
 | `reason`        | STRING   | NULLABLE |  Reason for failure (for `Message` type). |
 
 ```json
-[TO DO]
-Put table JSON schema here.
-...
+[
+    {
+        "name": "timestamp",
+        "type": "INTEGER",
+        "mode": "REQUIRED",
+        "description": "Unix epoch timestamp (milliseconds)."
+    },
+    {
+        "name": "type",
+        "type": "STRING",
+        "mode": "REQUIRED",
+        "description": "Log type: `Request`, `Response` or `Message`."
+    },
+    {
+        "name": "trace_id",
+        "type": "STRING",
+        "mode": "REQUIRED",
+        "description": "Unique identifier for the request (from the `trace-id` header)."
+    },
+    {
+        "name": "tag_name",
+        "type": "STRING",
+        "mode": "REQUIRED",
+        "description": "Name of the GTM tag generating the log."
+    },
+    {
+        "name": "request_method",
+        "type": "STRING",
+        "mode": "NULLABLE",
+        "description": "HTTP method (GET, POST, etc.)."
+    },
+    {
+        "name": "request_url",
+        "type": "STRING",
+        "mode": "NULLABLE",
+        "description": "URL of the API request."
+    },
+    {
+        "name": "request_body",
+        "type": "JSON",
+        "mode": "NULLABLE",
+        "description": "JSON string representation of request body."
+    },
+    {
+        "name": "response_status_code",
+        "type": "INTEGER",
+        "mode": "NULLABLE",
+        "description": "HTTP status code from API response."
+    },
+    {
+        "name": "response_body",
+        "type": "JSON",
+        "mode": "NULLABLE",
+        "description": "JSON string representation of API response body."
+    },
+    {
+        "name": "response_headers",
+        "type": "JSON",
+        "mode": "NULLABLE",
+        "description": "JSON string representation of API response headers."
+    },
+    {
+        "name": "message",
+        "type": "STRING",
+        "mode": "NULLABLE",
+        "description": "Additional log messages (for `Message` type)."
+    },
+    {
+        "name": "reason",
+        "type": "STRING",
+        "mode": "NULLABLE",
+        "description": "Reason for failure (for `Message` type)."
+    }
+]
 ```
 
-#### Table Creation on BigQuery
+#### Creating the BigQuery Table
 
-[TO DO]
+It's possible to create the table using the UI or via SQL.
 
-- Example of manually creating the table
+Before creating the table you can choose a **partitioning setting** and also a **clustering setting**. It's not required, but this can help optimizing performance and costs associated with this table.
+Suggestion: partition by ingestion time and cluster by `tag_name` or `type`.
 
-- Example of creating the table via SQL
+- Method 1: Using the BigQuery UI
+
+Go to **BigQuery project**; choose or create a **dataset**; for the chosen dataset click the three vertical dots next to its name and select **"Create table"**.
+
+Give the table a name and click `Edit as text` under the _Schema_ section. 
+Copy and paste the [required table schema](#required-table-schema) or the [expanded table schema](#expanded-table-schema-suggestion).
+
+![Table creation on UI](/images/gtms-7-table-creation.png)
+
+Optionally, you can define the **partitioning setting** and **clustering setting**.
+![Table partitioning and clustering settings](/images/gtms-7-table-partitioning-and-clustering.png)
+
+
+- Method 2: Using SQL
+
+Go to **BigQuery project**; choose or create a **dataset**; open a **new query** and run the following command.
+Optionally, you can define the **partitioning setting** and **clustering setting**.
+```sql
+CREATE TABLE `<your_project_id>.<your_dataset_id>.<your_table_id>` (
+  -- Required fields
+  timestamp INTEGER NOT NULL OPTIONS(description="Unix epoch timestamp (milliseconds)."),
+  type STRING NOT NULL OPTIONS(description="Log type: `Request`, `Response` or `Message`."),
+  trace_id STRING NOT NULL OPTIONS(description="Unique identifier for the request (from the `trace-id` header)."),
+  tag_name STRING NOT NULL OPTIONS(description="Name of the GTM tag generating the log."),
+  -- Optional fields
+  request_method STRING OPTIONS(description="HTTP method (GET, POST, etc.)."),
+  request_url STRING OPTIONS(description="URL of the API request."),
+  request_body JSON OPTIONS(description="JSON string representation of request body."),
+  response_status_code INTEGER OPTIONS(description="HTTP status code from API response."),
+  response_body JSON OPTIONS(description="JSON string representation of API response body."),
+  response_headers JSON OPTIONS(description="JSON string representation of API response headers."),
+  message STRING OPTIONS(description="Additional log messages (for `Message` type)."),
+  reason STRING OPTIONS(description="Reason for failure (for `Message` type).")
+)
+-- Optional
+PARTITION BY _PARTITIONDATE
+CLUSTER BY tag_name; -- or type
+```
 
 ---
 
@@ -97,6 +229,7 @@ Put table JSON schema here.
 const BigQuery = require('BigQuery');
 const getRequestHeader = require('getRequestHeader');
 const getTimestampMillis = require('getTimestampMillis');
+const JSON = require('JSON');
 const isLoggingEnabledForBigQuery = determinateIsLoggingEnabledForBigQuery();
 const traceId = isLoggingEnabled ? getRequestHeader('trace-id') : undefined;
 
@@ -126,7 +259,7 @@ logToBigQuery({
   'event_name': 'purchase',
   'request_method': 'POST',
   'request_url': postUrl,
-  'request_body': postBody
+  'request_body': stringifyJsonColumnToBigQuery(postBody)
 });
 
 // 'Response'
@@ -138,8 +271,8 @@ sendHttpRequest(postUrl, (statusCode, headers, body) => {
     'timestamp': getTimestampMillis(),
     'event_name': 'purchase',
     'response_status_code': statusCode,
-    'response_headers': headers,
-    'response_body': JSON.parse(body)
+    'response_headers': stringifyJsonColumnToBigQuery(headers),
+    'response_body': stringifyJsonColumnToBigQuery(body)
   });
 }, { method: 'POST' }, JSON.stringify(postBody));
 
@@ -152,6 +285,12 @@ function logToBigQuery(logObject) {
     };
     BigQuery.insert(connectionInfo, [logObject], { ignoreUnknownValues: true });
   }
+}
+
+// Required if a column in the table is of JSON BigQuery type.
+function stringifyJsonColumnToBigQuery(jsonObj) {
+  const jsonString = JSON.stringify(jsonObj);
+  return jsonString ? jsonString.split('"').join('\"') : undefined;
 }
 
 function determinateIsLoggingEnabledForBigQuery() {
@@ -191,9 +330,13 @@ function determinateIsLoggingEnabledForBigQuery() {
     {
       "type": "GROUP",
       "name": "logsBigQueryConfigGroup",
-      "displayName": "",
       "groupStyle": "NO_ZIPPY",
       "subParams": [
+        {
+          "type": "LABEL",
+          "name": "logsBigQueryConfigGroupHelpText",
+          "displayName": "Service Account permissions or credentials are required if the server container is in a different project than BigQuery (either on GCP or other cloud hosting platform).\n<br>\nLearn more:\n<br>\n<ul>\n<li><a href=\"https://stape.io/blog/how-to-connect-google-service-account-to-stape\" target=\"_blank\">Stape blog</a></li>\n<li><a href=\"https://www.simoahava.com/analytics/write-to-google-bigquery-from-gtm-server-container/#authentication\" target=\"_blank\">Simo Ahava blog</a></li>\n</ul>\n<br>"
+        },
         {
           "type": "TEXT",
           "name": "logBigQueryProjectId",
