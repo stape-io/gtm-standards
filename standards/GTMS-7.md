@@ -179,8 +179,8 @@ Based on the log `type`, the following additional fields are recommended:
 
 It's possible to create the table using the UI or via SQL.
 
-Before creating the table you can choose a **partitioning setting** and also a **clustering setting**. It's not required, but this can help optimizing performance and costs associated with this table.
-Suggestion: partition by ingestion time and cluster by `tag_name` or `type`.
+Before creating the table you can choose a **partitioning setting** and also a **clustering setting**. It's not required, but this can help optimize performance and costs associated with this table.
+Suggestion: **partition** by `ingestion time - day` and **cluster** by `tag_name` or `type`.
 
 - Method 1: Using the BigQuery UI
 
@@ -217,8 +217,8 @@ CREATE TABLE `<your_project_id>.<your_dataset_id>.<your_table_id>` (
   reason STRING OPTIONS(description="Reason for failure (for `Message` type).")
 )
 -- Optional
-PARTITION BY _PARTITIONDATE
-CLUSTER BY tag_name; -- or type
+PARTITION BY _PARTITIONDATE -- Partition by day
+CLUSTER BY tag_name; -- Cluster by tag_name or type
 ```
 
 ---
