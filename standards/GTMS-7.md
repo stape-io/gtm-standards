@@ -259,7 +259,7 @@ logToBigQuery({
   'event_name': 'purchase',
   'request_method': 'POST',
   'request_url': postUrl,
-  'request_body': stringifyJsonColumnToBigQuery(postBody)
+  'request_body': JSON.stringify(postBody)
 });
 
 // 'Response'
@@ -271,8 +271,8 @@ sendHttpRequest(postUrl, (statusCode, headers, body) => {
     'timestamp': getTimestampMillis(),
     'event_name': 'purchase',
     'response_status_code': statusCode,
-    'response_headers': stringifyJsonColumnToBigQuery(headers),
-    'response_body': stringifyJsonColumnToBigQuery(body)
+    'response_headers': JSON.stringify(headers),
+    'response_body': JSON.stringify(body)
   });
 }, { method: 'POST' }, JSON.stringify(postBody));
 
@@ -285,12 +285,6 @@ function logToBigQuery(logObject) {
     };
     BigQuery.insert(connectionInfo, [logObject], { ignoreUnknownValues: true });
   }
-}
-
-// Required if a column in the table is of JSON BigQuery type.
-function stringifyJsonColumnToBigQuery(jsonObj) {
-  const jsonString = JSON.stringify(jsonObj);
-  return jsonString ? jsonString.split('"').join('\"') : undefined;
 }
 
 function determinateIsLoggingEnabledForBigQuery() {
