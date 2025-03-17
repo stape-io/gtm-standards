@@ -327,11 +327,6 @@ function determinateIsLoggingEnabledForBigQuery() {
       "groupStyle": "NO_ZIPPY",
       "subParams": [
         {
-          "type": "LABEL",
-          "name": "logsBigQueryConfigGroupHelpText",
-          "displayName": "Service Account permissions or credentials are required if the server container is in a different project than BigQuery (either on GCP or other cloud hosting platform).\n<br>\nLearn more:\n<br>\n<ul>\n<li><a href=\"https://stape.io/blog/how-to-connect-google-service-account-to-stape\" target=\"_blank\">Stape blog</a></li>\n<li><a href=\"https://www.simoahava.com/analytics/write-to-google-bigquery-from-gtm-server-container/#authentication\" target=\"_blank\">Simo Ahava blog</a></li>\n</ul>\n<br>"
-        },
-        {
           "type": "TEXT",
           "name": "logBigQueryProjectId",
           "displayName": "BigQuery Project ID",
