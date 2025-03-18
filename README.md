@@ -16,6 +16,7 @@ We hope that the community will benefit from using our standards and help us imp
 - [GTMS-4](standards/GTMS-4.md) - Template code formatting
 - [GTMS-5](standards/GTMS-5.md) - Template repository file structure
 - [GTMS-6](standards/GTMS-6.md) - Firebase Settings
+- [GTMS-7](standards/GTMS-7.md) - Server Templates BigQuery Logging
 
 ## Open Source
 
