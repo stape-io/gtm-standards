@@ -12,7 +12,7 @@ GTM Server-Side does not have a common format for writing logs to `BigQuery`. Th
 - Each log line must contain at least: `timestamp`, `type`, `tag_name` and `trace_id` fields.
 - Field `timestamp` must contain the Unix epoch timestamp in milliseconds.
 - Field `type` must contain one of these values `Request`, `Response`, `Message`. Which helps easily filter logs.
-- `trace_id` must contain a unique identifier of the current incoming request. This field is used for stitching all logs done by all tags/clients during one request. It's highly recommended using the `trace-id` header for this, as many clouds/platforms use it for tracing. 
+- `trace_id` must contain a unique identifier of the current incoming request. This field is used for stitching all logs done by all tags/clients during one request. It's highly recommended using the `trace-id` header for this, as many clouds/platforms use it for tracing.
 - Field `tag_name` must contain the tag name.
 - All fields must use snake case naming, e.g. `trace_id`, `response_code`etc. and *not* `TraceId`, `ResponseCode` etc.
 - `ignoreUnknownValues` must be set to `true` in `BigQuery.insert(...)` to handle schema changes gracefully. This allows new fields to be added without breaking existing logs.
@@ -95,6 +95,7 @@ Based on the log `type`, the following additional fields are recommended:
 | `response_status_code` | INTEGER    | NULLABLE |  HTTP status code from API response (if applicable). |
 | `response_body` | JSON   | NULLABLE |  JSON string representation of API response body (if applicable). |
 | `response_headers` | JSON   | NULLABLE |  JSON string representation of API response headers (if applicable). |
+| `event_name`       | STRING   | NULLABLE |  Name of the event being tracked. |
 | `message`       | STRING   | NULLABLE |  Additional log messages (for `Message` type). |
 | `reason`        | STRING   | NULLABLE |  Reason for failure (for `Message` type). |
 
@@ -161,6 +162,12 @@ Based on the log `type`, the following additional fields are recommended:
         "description": "JSON string representation of API response headers."
     },
     {
+        "name": "event_name",
+        "type": "STRING",
+        "mode": "NULLABLE",
+        "description": "Name of the event being tracked."
+    },
+    {
         "name": "message",
         "type": "STRING",
         "mode": "NULLABLE",
@@ -186,13 +193,13 @@ Suggestion: **partition** by `ingestion time - day` and **cluster** by `tag_name
 
 Go to **BigQuery project**; choose or create a **dataset**; for the chosen dataset click the three vertical dots next to its name and select **"Create table"**.
 
-Give the table a name and click `Edit as text` under the _Schema_ section. 
+Give the table a name and click `Edit as text` under the _Schema_ section.
 Copy and paste the [required table schema](#required-table-schema) or the [expanded table schema](#expanded-table-schema-suggestion).
 
-![Table creation on UI](/images/gtms-7-table-creation.png)
+![Table creation on UI](../images/gtms-7-table-creation.png)
 
 Optionally, you can define the **partitioning setting** and **clustering setting**.
-![Table partitioning and clustering settings](/images/gtms-7-table-partitioning-and-clustering.png)
+![Table partitioning and clustering settings](../images/gtms-7-table-partitioning-and-clustering.png)
 
 
 - Method 2: Using SQL
@@ -213,6 +220,7 @@ CREATE TABLE `<your_project_id>.<your_dataset_id>.<your_table_id>` (
   response_status_code INTEGER OPTIONS(description="HTTP status code from API response."),
   response_body JSON OPTIONS(description="JSON string representation of API response body."),
   response_headers JSON OPTIONS(description="JSON string representation of API response headers."),
+  event_name STRING OPTIONS(description="Name of the event being tracked."),
   message STRING OPTIONS(description="Additional log messages (for `Message` type)."),
   reason STRING OPTIONS(description="Reason for failure (for `Message` type).")
 )
@@ -295,8 +303,8 @@ function determinateIsLoggingEnabledForBigQuery() {
 
 ### Example UI
 
-![UI 1](/images/gtms-7-ui-1.png)
-![UI 2](/images/gtms-7-ui-2.png)
+![UI 1](../images/gtms-7-ui-1.png)
+![UI 2](../images/gtms-7-ui-2.png)
 
 ```json
 {
