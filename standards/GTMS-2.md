@@ -57,7 +57,8 @@ function isConsentGivenOrNotRequired() {
         },
         {
           "value": "required",
-          "displayValue": "Send data in case marketing consent given"
+          "displayValue": "Send data in case marketing consent given",
+          "help": "Aborts the tag execution if marketing consent (<i>ad_storage</i> Google Consent Mode or Stape's Data Tag parameter) is not given."
         }
       ],
       "simpleValueType": true,
