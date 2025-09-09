@@ -22,11 +22,11 @@ This standard provides a way to manage consent in the SGTM templates.
  ```js
 const eventData = getAllEventData();
 
-if (!isConsentGivenOrNotRequired()) {
+if (!isConsentGivenOrNotRequired(data, eventData)) {
   return data.gtmOnSuccess();
 }
 
-function isConsentGivenOrNotRequired() {
+function isConsentGivenOrNotRequired(data, eventData) {
   if (data.adStorageConsent !== 'required') return true;
   if (eventData.consent_state) return !!eventData.consent_state.ad_storage;
   const xGaGcs = eventData['x-ga-gcs'] || ''; // x-ga-gcs is a string like "G110"
@@ -42,8 +42,8 @@ function isConsentGivenOrNotRequired() {
 ```json
 {
   "type": "GROUP",
-  "name": "consentSettingsGroup",
-  "displayName": "Consent Settings",
+  "name": "tagExecutionConsentSettingsGroup",
+  "displayName": "Tag Execution Consent Settings",
   "groupStyle": "ZIPPY_CLOSED",
   "subParams": [
     {
