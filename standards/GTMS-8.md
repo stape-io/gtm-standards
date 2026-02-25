@@ -18,6 +18,19 @@ This standard provides a way to standardize Stape Store configurations (Collecti
   - the `getStapeStoreDocumentUrl()` function must be used to get the Stape Store document URL.
   - the `generateDocumentId()` function must be used to generate a document ID. This function can be modified if needed.
 
+**Note 📝:** the standard doesn't need to be strictly followed. Some of the templates that use this standard modified it to fit their needs.
+
+### Templates that use this standard
+
+- [Logger tag](https://github.com/stape-io/logger-tag)
+- [Stape Store Writer tag](https://github.com/stape-io/stape-store-writer-tag)
+- [Cookie Restore tag](https://github.com/stape-io/cookie-restore-tag)
+- [Stape Store Restore Variable](https://github.com/stape-io/stape-store-restore-variable)
+- [Stape Store Lookup Variable](https://github.com/stape-io/stape-store-lookup-variable)
+- [Duplicate Transaction Checker Variable](https://github.com/stape-io/duplicate-transaction-checker-variable)
+- [Stape Store Margin Lookup variable](https://github.com/stape-io/stape-store-margin-lookup-variable)
+  - It uses a dedicated base path, always `/poas/feeds/default`. The rest is the same.
+
 ### Example Code
 
 ```js
