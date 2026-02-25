@@ -7,7 +7,7 @@ This repository contains the Stape standards for the Google Tag Manager.
 Because of lacking some functionality in GTM, we need to use some workarounds to achieve the desired functionality.
 By using standards, we can make sure that the GTM solutions provided by the Stape team are easy to understand and maintain by everybody.
 
-We hope that the community will benefit from using our standards and help us improve them. 
+We hope that the community will benefit from using our standards and help us improve them.
 
 ## Standards
 
@@ -17,6 +17,7 @@ We hope that the community will benefit from using our standards and help us imp
 - [GTMS-5](standards/GTMS-5.md) - Template repository file structure
 - [GTMS-6](standards/GTMS-6.md) - Firebase Settings
 - [GTMS-7](standards/GTMS-7.md) - Server Templates BigQuery Logging
+- [GTMS-8](standards/GTMS-8.md) - Server Templates Stape Store Integration
 
 ## Open Source
 
