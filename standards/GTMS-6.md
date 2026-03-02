@@ -3,12 +3,12 @@
 
 ### Problem that solved by this standard
 
-Server GTM does not have a standard UI for firebase settings.
-For each template that uses firebase, you need to create a UI for firebase settings.
+Server GTM does not have a standard UI for Firebase settings.
+For each template that uses Firebase, you need to create a UI for Firebase settings.
 
 ### Standard description
- 
-- The field name `firebaseProjectId` in the template must be used for the Firebase project id.
+
+- The field name `firebaseProjectId` in the template must be used for the Firebase Project ID.
 - The field name `firebasePath` in the template must be used for the Firestore document/collection path.
 
 ### Example Code
