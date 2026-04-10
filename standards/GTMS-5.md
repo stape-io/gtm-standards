@@ -1,4 +1,5 @@
 # GTMS-5
+
 ## Template repository file structure
 
 ### Problem that solved by this standard
@@ -11,10 +12,27 @@ There is no requirement to store the code of a template in a separate file, howe
 ### Standard description
 
 Required by GTM Template Gallery:
+
 - LICENSE
 - metadata.yaml
 - template.tpl
 
 Required by this standard:
-- template.js - template code
-- README.md - template description
+
+- template.js - Template code
+- .prettierrc - Prettier repo-level configuration
+- tests.yaml - Tests used in the template
+- README.md - Template description
+
+### Tests File
+
+The tests inside `template.tpl` are written in .yaml syntax. Given that, the file `tests.yaml` must be a copy of what is in the `template.tpl` under `__TESTS__`.
+Observation: When exporting a template, the tests codes are formatted by GTM into an inline compact hard way to read. Before pushing the `tests.yaml` file, make sure the tests codes are formatted properly using yaml code block sintax (`|-`). See illustration below:
+
+**Correct Format**
+
+![Correct Way](../images/gtms-5-correct.png)
+
+**Wrong Format**
+
+![Wrong Way](../images/gtms-5-wrong.png)
