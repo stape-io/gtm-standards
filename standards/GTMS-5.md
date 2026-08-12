@@ -35,8 +35,9 @@ Optionally, the repository can contain a `tests.yaml` file (if any tests exist),
   }
   ```
 - `tests.yaml` - tests used in the template
-- `.github/workflows/discourse-notify-and-readme-sync.yml` - workflow for template changes notifications to Stape Community and README updates. [Workflow reference](https://github.com/stape-io/template-changes-shared-workflows/tree/main/gtm-templates-specific-workflows/.github/workflows).
-- `.github/workflows/gallery-status.yml` - workflow for GTM Gallery Status checks twice a week. [Workflow reference](https://github.com/stape-io/template-changes-shared-workflows/tree/main/gtm-templates-specific-workflows/.github/workflows).
+- `.github/workflows` folder with the 2 files below (⚠️ Do NOT add this folder in the initial boilerplate in the `main` branch when the repository is created. Add it only in the branch that will contain the first version of the template.):
+  - `.github/workflows/discourse-notify-and-readme-sync.yml` - workflow for template changes notifications to Stape Community and README updates. [Workflow reference](https://github.com/stape-io/template-changes-shared-workflows/tree/main/gtm-templates-specific-workflows/.github/workflows).
+  - `.github/workflows/gallery-status.yml` - workflow for GTM Gallery Status checks twice a week. [Workflow reference](https://github.com/stape-io/template-changes-shared-workflows/tree/main/gtm-templates-specific-workflows/.github/workflows).
 
 ##### `tests.yaml` File
 
