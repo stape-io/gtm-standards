@@ -18,6 +18,7 @@ We hope that the community will benefit from using our standards and help us imp
 - [GTMS-6](standards/GTMS-6.md) - Firebase Settings
 - [GTMS-7](standards/GTMS-7.md) - Server Templates BigQuery Logging
 - [GTMS-8](standards/GTMS-8.md) - Server Templates Stape Store Integration
+- [GTMS-9](standards/GTMS-9.md) - Template Change Notes
 
 ## Open Source
 
